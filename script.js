@@ -21,6 +21,35 @@ const onClickOutside = (element, callback) => {
 
 onClickOutside(button, () => dropdown.setAttribute("style", "visibility: hidden;"));
 
+
+// SLIDER 
+
+dots = document.querySelectorAll(".dot");
+console.log(dots);
+dots.forEach((e) => {
+    e.addEventListener("click", () => {
+        goToSlide(Number(e.id));
+    })
+})
+
+let currentSlideId = 1;
+
+function goToSlide(selectorId) {
+    document.getElementById(`${currentSlideId}`).classList.remove("active");
+    if (selectorId > currentSlideId) {
+        for (let i = 0 ; selectorId - currentSlideId - i > 0 ; i++ ) {
+            forward();
+        }
+        currentSlideId = selectorId; 
+    } else if (selectorId < currentSlideId) {
+        for (let i = 0 ; currentSlideId - selectorId - i > 0 ; i++ ) {
+            backward();
+        }
+        currentSlideId = selectorId;
+    }
+    document.getElementById(`${selectorId}`).classList.add("active");
+}
+
 const forwardButton = document.querySelector(".forward");
 forwardButton.addEventListener("click", () => {
     forward();
