@@ -4,7 +4,6 @@ const dropdown = document.querySelector(".options");
 button.addEventListener("click", () => {
     dropdown.setAttribute("style", dropdown.getAttribute("style") === "visibility: hidden;" ? "visibility: visible;" : "visibility: hidden;");
     option = dropdown.querySelectorAll(".option");
-    console.log(dropdown.getAttribute("style"));
     option.forEach(element => {
         element.addEventListener("click", (e) => {
             button.textContent = e.target.textContent;
@@ -25,7 +24,6 @@ onClickOutside(button, () => dropdown.setAttribute("style", "visibility: hidden;
 // SLIDER 
 
 dots = document.querySelectorAll(".dot");
-console.log(dots);
 dots.forEach((e) => {
     e.addEventListener("click", () => {
         goToSlide(Number(e.id));
@@ -35,19 +33,17 @@ dots.forEach((e) => {
 let currentSlideId = 1;
 
 function goToSlide(selectorId) {
-    document.getElementById(`${currentSlideId}`).classList.remove("active");
     if (selectorId > currentSlideId) {
-        for (let i = 0 ; selectorId - currentSlideId - i > 0 ; i++ ) {
+        while ( selectorId - currentSlideId > 0 ) {
             forward();
         }
-        currentSlideId = selectorId; 
+        // currentSlideId = selectorId; 
     } else if (selectorId < currentSlideId) {
-        for (let i = 0 ; currentSlideId - selectorId - i > 0 ; i++ ) {
+        while (currentSlideId - selectorId  > 0 ) {
             backward();
         }
         currentSlideId = selectorId;
     }
-    document.getElementById(`${selectorId}`).classList.add("active");
 }
 
 const forwardButton = document.querySelector(".forward");
@@ -69,6 +65,12 @@ function forward() {
     let archive = document.querySelector(".archive");
     imgContainer.append(newImg);
     archive.append(currentImg);
+    document.getElementById(`${currentSlideId}`).classList.remove("active");
+    if (currentSlideId === 4) {
+        currentSlideId = 0;
+    }
+    document.getElementById(`${currentSlideId + 1}`).classList.add("active");
+    currentSlideId++;
 }
 
 
@@ -82,4 +84,20 @@ function backward() {
     let archive = document.querySelector(".archive");
     imgContainer.append(newImg);
     archive.prepend(currentImg);
+    document.getElementById(`${currentSlideId}`).classList.remove("active");
+    if (currentSlideId === 1) {
+        currentSlideId = 5;
+        console.log(currentSlideId);
+    }
+    document.getElementById(`${currentSlideId - 1}`).classList.add("active");
+    currentSlideId--;
 }
+
+function slide() {
+    setTimeout(() => {
+        forward()
+        slide();
+    }, 2000)
+}
+
+slide();
